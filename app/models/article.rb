@@ -77,7 +77,7 @@ class Article < Content
     other = Article.find other_id
     return false unless other
 
-    self.body = self.body + "\n----------------------\n" + other.body
+    self.body = self.body.to_s + "\n----------------------\n" + other.body.to_s
     other.comments.each do |c|
       self.comments << c
       c.save!
