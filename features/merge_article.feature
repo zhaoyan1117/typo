@@ -59,8 +59,8 @@ Scenario: Comments should be merged
   Then I fill in "merge_with" with "4"
   Then I press "Merge With This Article"
   And I go to page for "article1"
-  Then I should see "good"
   Then I should see "nice"
+  Then I should see "good"
 
 Scenario: Title should be eiter one of the previous article
   Given I am logged in with "admin1" and password "admin123"

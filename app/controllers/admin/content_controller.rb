@@ -30,7 +30,7 @@ class Admin::ContentController < Admin::BaseController
 
   def edit
     @article = Article.find(params[:id])
-    @show_merge = true if current_user.profile_id == 1
+    @show_merge = current_user.admin?
     unless @article.access_by? current_user
       redirect_to :action => 'index'
       flash[:error] = _("Error, you are not allowed to perform this action")

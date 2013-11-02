@@ -83,6 +83,8 @@ class Article < Content
       c.save!
     end
 
+    other = Article.find other_id
+
     other.destroy
 
     return self.save!
