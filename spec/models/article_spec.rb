@@ -34,7 +34,7 @@ describe Article do
     end
 
     it 'should merge the body of the other article' do
-      Article.stub(:find).and_return @a2
+      Article.stub(:find_by_id).and_return @a2
       @a1.merge_with(@a2.id)
       @a1.body.should include "a1_body"
       @a1.body.should include "a2_body"
@@ -46,7 +46,7 @@ describe Article do
     end
 
     it 'should delete the other article' do
-      Article.stub(:find).and_return @a2
+      Article.stub(:find_by_id).and_return @a2
       @a2.should_receive(:destroy)
       @a1.merge_with @a2.id
     end

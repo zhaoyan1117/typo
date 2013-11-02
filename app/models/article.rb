@@ -71,10 +71,12 @@ class Article < Content
     end
   end
 
-  def merge_with other_id
-    return false if id == other_id
+  def merge_with(other_id)
+
+    return false if self.id == other_id.to_i
     
-    other = Article.find other_id
+    other = Article.find_by_id other_id
+    
     return false unless other
 
     self.body = self.body.to_s + "\n----------------------\n" + other.body.to_s
@@ -83,7 +85,7 @@ class Article < Content
       c.save!
     end
 
-    other = Article.find other_id
+    other = Article.find_by_id other_id
 
     other.destroy
 
