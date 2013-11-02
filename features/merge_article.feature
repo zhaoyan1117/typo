@@ -49,7 +49,8 @@ Scenario: Merged articles should have one author from the original
   Then I press "Merge With This Article"
   And I go to admin page
   Then I follow "All Articles"
-  Then I should see "writer1"
+  Then I should see "article1"
+  Then I should see "Author"
 
 Scenario: Comments should be merged
   Given I am logged in with "admin1" and password "admin123"
