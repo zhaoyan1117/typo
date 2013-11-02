@@ -14,9 +14,9 @@ Background:
     |admin1      |admin1@typo.com  |admin123  |admin       |
 
   Given the following articles exist:
-    |id  |title    |user    |body            |state     |
-    |11  |article1 |writer1 |article1_body   |published |
-    |22  |article2 |writer2 |article2_body   |published |
+    |title    |user    |body            |state     |
+    |article1 |writer1 |article1_body   |published |
+    |article2 |writer2 |article2_body   |published |
 
   Given the following comments exist:
     |author    |body |article |
@@ -34,9 +34,9 @@ Scenario: Merged articles should contain text of both previous articles.
   Then I follow "All Articles"
   Then I follow "article1"
   Then I should see "Merge Articles"
-  Then I fill in "Article ID" with "22"
-  Then I press "Merge"
-  And I go to article path for "article1"
+  Then I fill in "merge_with" with "4"
+  Then I press "Merge With This Article"
+  And I go to edit path for "article1"
   Then I should see "article1_body"
   Then I should see "article2_body"
 
@@ -45,8 +45,8 @@ Scenario: Merged articles should have one author from the original
   Then I follow "All Articles"
   Then I follow "article1"
   Then I should see "Merge Articles"
-  Then I fill in "Article ID" with "22"
-  Then I press "Merge"
+  Then I fill in "merge_with" with "4"
+  Then I press "Merge With This Article"
   And I go to admin page
   Then I follow "All Articles"
   Then I should see "writer1"
@@ -56,9 +56,9 @@ Scenario: Comments should be merged
   Then I follow "All Articles"
   Then I follow "article1"
   Then I should see "Merge Articles"
-  Then I fill in "Article ID" with "22"
-  Then I press "Merge"
-  And I go to article path for "article1"
+  Then I fill in "merge_with" with "4"
+  Then I press "Merge With This Article"
+  And I go to page for "article1"
   Then I should see "good"
   Then I should see "nice"
 
@@ -67,7 +67,7 @@ Scenario: Title should be eiter one of the previous article
   Then I follow "All Articles"
   Then I follow "article1"
   Then I should see "Merge Articles"
-  Then I fill in "Article ID" with "22"
-  Then I press "Merge"
-  And I go to article path for "article1"
+  Then I fill in "merge_with" with "4"
+  Then I press "Merge With This Article"
+  And I go to edit path for "article1"
   Then I should see "article1"

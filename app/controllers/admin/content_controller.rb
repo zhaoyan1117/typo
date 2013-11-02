@@ -2,6 +2,7 @@ require 'base64'
 
 module Admin; end
 class Admin::ContentController < Admin::BaseController
+
   layout "administration", :except => [:show, :autosave]
 
   cache_sweeper :blog_sweeper
@@ -29,6 +30,7 @@ class Admin::ContentController < Admin::BaseController
 
   def edit
     @article = Article.find(params[:id])
+    @show_merge = true if current_user.profile_id == 1
     unless @article.access_by? current_user
       redirect_to :action => 'index'
       flash[:error] = _("Error, you are not allowed to perform this action")
@@ -111,6 +113,16 @@ class Admin::ContentController < Admin::BaseController
       return true
     end
     render :text => nil
+  end
+
+  def merge
+    @article = Article.find params[:id]
+    if @article.merge_with params[:merge_with]
+      flash[:notice] = "Merge Done!"
+    else
+      flash[:error] = "Article cannot merge!"
+    end
+    redirect_to :action => "edit", :id => @article.id
   end
 
   protected

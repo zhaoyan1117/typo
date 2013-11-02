@@ -71,6 +71,23 @@ class Article < Content
     end
   end
 
+  def merge_with other_id
+    return false if id == other_id
+    
+    other = Article.find other_id
+    return false unless other
+
+    self.body = self.body + "\n----------------------\n" + other.body
+    other.comments.each do |c|
+      self.comments << c
+      c.save!
+    end
+
+    other.destroy
+
+    return self.save!
+  end
+
   def set_permalink
     return if self.state == 'draft'
     self.permalink = self.title.to_permalink if self.permalink.nil? or self.permalink.empty?

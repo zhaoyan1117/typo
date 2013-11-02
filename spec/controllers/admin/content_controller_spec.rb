@@ -79,7 +79,6 @@ describe Admin::ContentController do
       assigns(:articles).should_not == [article]
       response.should be_success
     end
-
   end
 
   shared_examples_for 'autosave action' do
@@ -459,9 +458,7 @@ describe Admin::ContentController do
         }.should raise_error(ActiveRecord::RecordNotFound)
       end.should change(Article, :count).by(-1)
     end
-
   end
-
 
   describe 'with admin connection' do
 
@@ -606,7 +603,6 @@ describe Admin::ContentController do
         response.body.should == '<ul class="unstyled" id="autocomplete"><li>bar</li><li>bazz</li></ul>'
       end
     end
-
   end
 
   describe 'with publisher connection' do
@@ -669,6 +665,29 @@ describe Admin::ContentController do
         end.should_not change(Article, :count)
       end
 
+    end
+  end
+
+  describe 'article merging' do
+    before :each do
+      Factory(:blog)
+      @user = Factory(:user, :profile => Factory(:profile_admin, :label => Profile::ADMIN))
+      request.session = { :user => @user.id }
+      @a1 = Factory(:article, :state => 'published')
+      @a2 = Factory(:article, :state => 'published')
+    end
+
+    it 'should call the merge_with method in the model' do
+      @a1.should_receive(:merge_with).with(@a2.id)
+      Article.stub(:find).with(@a1.id).and_return(@a1)
+      put :merge, {:id => @a1.id, :merge_with => @a2.id}
+    end
+    
+    it 'should redirect_to to the edit path of the original article' do
+      @a1.stub(:merge_with).with(@a2.id).and_return(true)
+      Article.stub(:find).with(@a1.id).and_return(@a1)
+      put :merge, {:id => @a1.id, :merge_with => @a2.id}
+      response.should redirect_to(:action => "edit", :id => @a1.id)
     end
   end
 end

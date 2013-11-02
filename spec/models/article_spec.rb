@@ -26,6 +26,33 @@ describe Article do
     assert_equal [:body, :extended], a.content_fields
   end
 
+
+  describe 'merge_with' do
+    before :each do
+      @a1 = Factory(:article, :state => 'published', body: 'a1_body', :author => 'a1_a')
+      @a2 = Factory(:article, :state => 'published', body: 'a2_body', :author => 'a2_a')
+    end
+
+    it 'should merge the body of the other article' do
+      Article.stub(:find).and_return @a2
+      @a1.merge_with(@a2.id)
+      @a1.body.should include "a1_body"
+      @a1.body.should include "a2_body"
+    end
+
+    it 'should contain the author of the original article' do
+      @a1.merge_with(@a2.id)
+      @a1.author.should == "a1_a"
+    end
+
+    it 'should delete the other article' do
+      Article.stub(:find).and_return @a2
+      @a2.should_receive(:destroy)
+      @a1.merge_with @a2.id
+    end
+  end
+
+
   describe "#permalink_url" do
     describe "with hostname" do
       subject { Article.new(:permalink => 'article-3', :published_at => Time.new(2004, 6, 1)).permalink_url(anchor=nil, only_path=false) }

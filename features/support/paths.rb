@@ -18,6 +18,17 @@ module NavigationHelpers
     when /^the new article page$/
       '/admin/content/new'
 
+    when /^admin page$/
+      '/admin'
+
+    when /^edit path for "(.*)"$/
+      a = Article.find_by_title($1)
+      "/admin/content/edit/#{a.id}"
+
+    when /^page for "(.*)"$/
+      a = Article.find_by_title($1)
+      a.permalink_url
+
     # Add more mappings here.
     # Here is an example that pulls values out of the Regexp:
     #
